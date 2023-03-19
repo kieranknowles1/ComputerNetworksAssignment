@@ -1,4 +1,4 @@
-/* Sample solution for the LunarLander assignment 
+/* Sample solution for the LunarLander assignment
  * KV5002
  *
  * Dr Alun Moon
@@ -53,7 +53,7 @@ sem_t condlock;
 
 /*** There are five threads defined for the controller ***/
 
-/* Keyboard scanning routine 
+/* Keyboard scanning routine
 	Runs in own thread, interprets user input.
 	Generates command structures for transmission to lander.
 */
@@ -79,7 +79,7 @@ void *keyboard(void *data)
             break;
         case KEY_RIGHT:
     		landercommand.rotn +=0.1;
-	 		if( landercommand.rotn >= 1 ) landercommand.rotn=1;		
+	 		if( landercommand.rotn >= 1 ) landercommand.rotn=1;
             break;
         case KEY_LEFT:
             landercommand.rotn-=0.1;
@@ -233,7 +233,7 @@ void parsestate(char *m)
 	Communicates with the lander model,
 	Sends commands and queries state,
 	Parses and decodes messages
-	
+
 	Data passed is port number to use.
 */
 void *lander(void *data)
@@ -309,13 +309,13 @@ void *dashboard(void *data)
 	d = mksocket();
 
     while (true) {
-        // TODO: Task XXX, construct buffer array with the sprintf methond with the following format 
+        // TODO: Task XXX, construct buffer array with the sprintf methond with the following format
         // "fuel:%f\naltitude:%f\n", landercond.fuel, landercond.altitude
-        
+
 
 
         // TODO: Task XXX, send the buffer to the dashboard by using sendto method
-		
+
 		usleep(500000);
 	}
 }
@@ -370,14 +370,14 @@ int main(int argc, char *argv[])
     if ((e = pthread_create(&kscan, NULL, keyboard, NULL)))
         fprintf(stderr, "not cheated keybord thread: %s\n", strerror(e));
 
-    
+
 
 
     if ((e = pthread_create(&lndr, NULL, lander, argv[1])))
         fprintf(stderr, "not created lander thread: %s\n", strerror(e));
 
     //TODO: Task XXX create one thread for dashboard with the function pthread_create
-    
+
 
     pthread_join(dsply, NULL);
 }
