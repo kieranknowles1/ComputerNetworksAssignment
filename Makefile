@@ -47,7 +47,7 @@ tags: $(SOURCES)
 .PHONY: clean pretty
 
 clean:
-	rm -f $(LIBS) controller
+	rm -f $(LIBS) controller debug_controller
 
 pretty: $(SOURCES)
 	indent -kr $?
