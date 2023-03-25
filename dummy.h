@@ -19,4 +19,9 @@ struct addrinfo
 #define AI_ADDRCONFIG 0x0020	/* Use configuration of this host to choose */
 #define AI_PASSIVE 0x0001       /* Socket address is intended for `bind'.  */
 
+extern int getaddrinfo(const char *__restrict __name,
+                       const char *__restrict __service,
+                       const struct addrinfo *__restrict __req,
+                       struct addrinfo **__restrict __pai);
+
 #endif

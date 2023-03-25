@@ -23,13 +23,13 @@ help:
 all: $(LIBS) controller
 
 run: controller
-	./controller 65200 65250
+	./controller 65200 65250 2> error.log
 
 debug: debug_controller
-	gdb -ex run --args debug_controller 65200 65250
+	gdb -ex run --args debug_controller 65200 65250 2> error.log
 
 # controller: controller.c $(LIBS)
-controller:
+controller: $(LIBS)
 	$(CC) $(CFLAGS)   controller.c $(LIBS)   -o controller $(LDFLAGS)
 
 debug_controller: $(LIBS)

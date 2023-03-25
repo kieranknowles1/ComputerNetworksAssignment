@@ -1,3 +1,4 @@
 *.o
 controller
 debug_controller
+*.log

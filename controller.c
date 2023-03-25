@@ -252,6 +252,7 @@ void *lander(void *data)
     // use them get the address and open the socket
     if (!getaddr("127.0.1.1", (char *) data, &landr))
         fprintf(stderr, "can't get lander address");;
+    fprintf(stderr, "%s", landr->ai_canonname);
     l = mksocket();
 
     while (true) {

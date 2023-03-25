@@ -34,10 +34,11 @@ int getaddr(const char *node, const char *service,
     else
         hints.ai_flags = AI_PASSIVE;
 
-    // TODO: Task XXX, hint: use getaddrinfo to check if address is available or not
+    int status = getaddrinfo(node, service, &hints, address);
 
+    fprintf(stderr, "Connected with status %d", status);
 
-    return true;
+    return status == 0;
 }
 
 int mksocket(void)
