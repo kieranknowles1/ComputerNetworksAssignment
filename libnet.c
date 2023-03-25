@@ -18,6 +18,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include "dummy.h"
+
 int getaddr(const char *node, const char *service,
             struct addrinfo **address)
 {

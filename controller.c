@@ -28,6 +28,8 @@
 #include <ctype.h>
 #include <curses.h>
 
+#include "dummy.h"
+
 /* semaphores and global variables for communication */
 
 struct command {

@@ -1,7 +1,7 @@
 CC=gcc
 LDFLAGS=-pthread -lcurses -lncurses
 LIBS=libnet.o console_safe.o
-CFLAGS=-Wall
+CFLAGS=-Wall -DREMOVE_DUMMY_HEADER
 DEBUG_CFLAGS=-g -O0
 SOURCES=libnet.c console_safe.c controller.c
 
