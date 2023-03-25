@@ -33,19 +33,25 @@ int getaddr(const char *node, const char *service,
         hints.ai_flags = AI_ADDRCONFIG;
     else
         hints.ai_flags = AI_PASSIVE;
+    hints.ai_flags |= AI_CANONNAME;
 
     int status = getaddrinfo(node, service, &hints, address);
 
-    fprintf(stderr, "Connected with status %d", status);
+    fprintf(stderr, "Connected with status %d\n", status);
 
     return status == 0;
 }
 
 int mksocket(void)
 {
-    // TODO: Task XXX, hint:  creates an endpoint for communication using the socket function
+    int fileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
 
+    if (fileDescriptor == -1) {
+        perror("Failed to get socket");
+        exit(1);
+    }
 
+    return fileDescriptor;
 }
 
 int bindsocket(int sfd, const struct sockaddr *addr, socklen_t addrlen)

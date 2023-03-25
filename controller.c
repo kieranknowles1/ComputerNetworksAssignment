@@ -240,6 +240,8 @@ void parsestate(char *m)
 */
 void *lander(void *data)
 {
+    char* service = (char*)data;
+
     size_t msgsize = 1000;
     char msgbuf[msgsize];
     int l;
@@ -248,11 +250,10 @@ void *lander(void *data)
     const char conditionq[] = "condition:?\n";
     const char stateq[] = "state:?\n";
 
-    //TODO: fix the getaddr and mksocket methods in libnet.c and
-    // use them get the address and open the socket
-    if (!getaddr("127.0.1.1", (char *) data, &landr))
+    if (!getaddr("127.0.1.1", service, &landr))
         fprintf(stderr, "can't get lander address");;
-    fprintf(stderr, "%s", landr->ai_canonname);
+    fprintf(stderr, "%s\n", landr->ai_canonname);
+
     l = mksocket();
 
     while (true) {
@@ -279,6 +280,7 @@ void *lander(void *data)
 
 
 		/* format command to send to lander */
+        sem_wait(&cmdlock);
 		sprintf(msgbuf,
 				"command:!\n"
 				"main-engine: %f\n"
@@ -286,6 +288,8 @@ void *lander(void *data)
 				,
 				landercommand.thrust, landercommand.rotn
 			   );
+        sem_post(&cmdlock);
+
 		sendto(l, msgbuf, strlen(msgbuf), 0, landr->ai_addr, landr->ai_addrlen);
         m = recvfrom(l, msgbuf, msgsize, 0, NULL, NULL);
 		msgbuf[m] = '\0';
