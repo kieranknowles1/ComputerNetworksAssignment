@@ -316,12 +316,19 @@ void *dashboard(void *data)
 	d = mksocket();
 
     while (true) {
-        // TODO: Task XXX, construct buffer array with the sprintf methond with the following format
-        // "fuel:%f\naltitude:%f\n", landercond.fuel, landercond.altitude
+        sem_wait(&condlock);
+        sprintf(buffer,
+            "fuel:%f\n"
+            "altitude:%f\n",
+            landercond.fuel,
+            landercond.altitude
+        );
+        sem_post(&condlock);
 
 
 
         // TODO: Task XXX, send the buffer to the dashboard by using sendto method
+        sendto(d, buffer, strlen(buffer), 0, daddr->ai_addr, daddr->ai_addrlen);
 
 		usleep(500000);
 	}
@@ -384,6 +391,8 @@ int main(int argc, char *argv[])
         fprintf(stderr, "not created lander thread: %s\n", strerror(e));
 
     //TODO: Task XXX create one thread for dashboard with the function pthread_create
+    if ((e = pthread_create(&dash, NULL, dashboard, argv[2])))
+        fprintf(stderr, "Failed to create dashboard thread: %s\n", strerror(e));
 
 
     pthread_join(dsply, NULL);
