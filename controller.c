@@ -342,11 +342,56 @@ void *dashboard(void *data)
 // TODO: Task XXX, finish the datalogging part to Periodically log data to a file.
 // please call datalogging in the appropriate place.
 
+// 200ms = 5hz
+const int DATA_LOG_SLEEP_MICROSECONDS = 200 * 1000;
+const char* DATA_LOG_FILE = "lander.log";
+
 void *datalogging(void *data)
 {
+    FILE* file = fopen(DATA_LOG_FILE, "w");
 
+    int index = 1;
 	while(true) {
+        fprintf(file, "Log entry %d:\n", index++);
 
+        sem_wait(&cmdlock);
+        fprintf(file,
+            " Commands:\n"
+            "  Rotation: %.1f\n"
+            "  Thrust: %.1f\n",
+            landercommand.rotn,
+            landercommand.thrust
+        );
+        sem_post(&cmdlock);
+
+        sem_wait(&condlock);
+        fprintf(file,
+            " Condition:\n"
+            "  Fuel: %.1f%%\n"
+            "  Altitude: %.1f\n",
+            landercond.fuel,
+            landercond.altitude
+        );
+        sem_post(&condlock);
+
+        sem_wait(&statelock);
+        fprintf(file,
+            " Lander state:\n"
+            "  Position: %-6.1fx, %-6.1fy\n"
+            "  Velocity: %-6.1fx, %-6.1fy\n"
+            "  Angle: %-6.3fO\n"
+            "  Angular velocity: %-6.3fO'\n",
+            landerstate.x, landerstate.y,
+            landerstate.dx, landerstate.dy,
+            landerstate.O,
+            landerstate.dO
+        );
+        sem_post(&statelock);
+
+        // Need to manually flush as the file is never closed normally
+        fflush(file);
+
+        usleep(DATA_LOG_SLEEP_MICROSECONDS);
 	}
 }
 
@@ -393,6 +438,10 @@ int main(int argc, char *argv[])
     //TODO: Task XXX create one thread for dashboard with the function pthread_create
     if ((e = pthread_create(&dash, NULL, dashboard, argv[2])))
         fprintf(stderr, "Failed to create dashboard thread: %s\n", strerror(e));
+
+    pthread_t dataLogThread;
+    if ((e = pthread_create(&dataLogThread, NULL, datalogging, NULL)))
+        fprintf(stderr, "Failed to create logging thread: %s\n", strerror(e));
 
 
     pthread_join(dsply, NULL);
