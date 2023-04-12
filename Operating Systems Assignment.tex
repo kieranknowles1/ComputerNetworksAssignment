@@ -1,6 +1,15 @@
 \documentclass{article}
 
 \usepackage{listings}
+\usepackage{xcolor}
+
+% https://tex.stackexchange.com/questions/116534/lstlisting-line-wrapping
+\lstset{
+    language=C,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
 
 \title{KV5002 Assignment}
 \author{w20013000}
@@ -117,6 +126,11 @@ still using the value.
 List of references.
 
 \section*{Appendix}
-Source code including detailed comments, completed controller.c and libnet.c.
+
+\subsection*{controller.c}
+\lstinputlisting{src/controller.c}
+
+\subsection*{libnet.c}
+\lstinputlisting{src/libnet.c}
 
 \end{document}
