@@ -1,0 +1,122 @@
+\documentclass{article}
+
+\usepackage{listings}
+
+\title{KV5002 Assignment}
+\author{w20013000}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{OS Theory}
+    \subsection{What is a multiprocessing system?}
+    // TODO: This
+    \subsubsection{Examples}
+    // TODO: This
+    \subsubsection{Benefits}
+    // TODO: This
+
+\subsection{The difference between a process and a thread?}
+A process is an instance of a program currently running on the system.
+A thread, meanwhile, is the smallest unit of execution scheduled by the operating system.
+Each thread belongs to a process, and each process has one or more threads.
+
+Different threads within the same process share the same memory which includes any
+statically or dynamically allocated variables. Each thread has its own stack and registers
+which store local variables.
+Different processes have separate memory spaces, even if they are running the same program.
+
+A process that requires multiprocessing will typically create multiple threads
+rather than multiple processes as creating and communicating between processes is
+more expensive than with threads.
+
+    \subsubsection{Scenario 1}
+    You're writing a report in Microsoft Office. While you are typing, the text is
+    displayed, and spelling and grammar are checked.
+
+    This is an example of a process using multiple threads.
+    One thread is responsible for displaying the text, while another thread is responsible
+    for checking spelling and grammar in it.
+
+    Both threads need to access the same resource, the text being written, and therefore
+    need to be part of the same process to share the same memory space.
+
+    \subsubsection{Scenario 2:}
+    You're writing a report in Microsoft Office while listening to online music from
+    iTunes.
+
+    This is an example of multiple processes. Office and iTunes don't need to share
+    memory and are different applications running different code, so they are run as
+    separate processes.
+
+
+\subsection{What is a race condition?}
+A race condition occurs when two or more threads attempt to access the same resource,
+such as a variable, at the same time. This can result in unexpected behaviour such as
+one thread overwriting the value written by another thread while the other thread is
+still using the value.
+
+    \subsubsection{What is a mutex?}
+    A mutex ensures that only one thread can access a resource at a time.
+    Before a thread accesses a shared resource, it must first lock the mutex associated with it.
+    If the mutex is already locked, the thread will wait until it is unlocked.
+    Once the thread is finished with the resource, it unlocks the mutex so that other
+    threads can access it.
+
+    \subsubsection{What is a semaphore and how does it differ?}
+    A semaphore is similar to a mutex, except that it allows one or more threads to hold
+    a lock at a time instead of just one. A semaphore is initialised with a value
+    that indicates the number of locks that can be held at a time.
+
+    Similar to a mutex, a thread must first lock the semaphore before accessing the shared resource.
+    If there are no locks available, the thread will wait until one becomes available.
+    The thread then unlocks the semaphore when it is finished with the resource.
+    The lock count is decremented by one when the semaphore is locked and incremented
+    when it is unlocked.
+
+    Semaphores can be used instead of mutexes when a resource has limited capacity,
+    such as with I/O devices, but can still be safely accessed by multiple threads at the same time.
+
+\subsection{What happens during a context switch?}
+// TODO: This
+
+\subsection{What is TLS}
+// TODO: This
+    \subsubsection{How does TLS protect private information?}
+    // TODO: This
+
+\section{The Lunar Lander Controller}{
+    % https://tex.stackexchange.com/questions/74529/sections-indexed-with-numbers-subsections-with-letters
+    \renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+
+    \subsection{Threads and Semaphores in Code}
+    // TODO: This
+
+    \subsection{Advantages and disadvantages of UDP nad TCP}
+    // TODO: This
+
+    \subsection{Data Logging}
+        // TODO: This
+
+        \subsubsection{What data is logged and why?}
+        // TODO: This
+
+        \subsubsection{What are the advantages and disadvantages of logging five times per second?}
+        // TODO: This
+
+        \subsubsection{How often would data be logged if not a fixed interval?}
+        // TODO: This
+
+        \subsubsection{{What rate does the size of the file grow and why?}}
+        // TODO: This
+}
+
+\section*{References}
+List of references.
+
+\section*{Appendix}
+Source code including detailed comments, completed controller.c and libnet.c.
+
+\end{document}
