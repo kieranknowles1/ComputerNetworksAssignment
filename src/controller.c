@@ -64,6 +64,17 @@ const char* condstate_to_string(enum condstate state) {
     }
 }
 
+const char* key_to_string(int key) {
+    switch (key) {
+        case 0: return "None";
+        case KEY_UP: return "Up";
+        case KEY_DOWN: return "Down";
+        case KEY_LEFT: return "Left";
+        case KEY_RIGHT: return "Right";
+        default: return "Unknown";
+    }
+}
+
 
 /*** There are five threads defined for the controller ***/
 
@@ -80,8 +91,8 @@ void *keyboard(void *data)
         int key;
         while ((key = key_pressed()) == ERR){;}   /* wait for a key-press */
 
-		last=key;
 		sem_wait(&cmdlock);/*Enter critical section*/
+		last=key;
         switch (key) {
         case KEY_UP:
             landercommand.thrust += 2;
@@ -371,9 +382,11 @@ void *datalogging(void *data)
         fprintf(file,
             " Commands:\n"
             "  Rotation: %.1f\n"
-            "  Thrust: %.1f\n",
+            "  Thrust: %.1f\n"
+            "  Last key: %s\n",
             landercommand.rotn,
-            landercommand.thrust
+            landercommand.thrust,
+            key_to_string(last)
         );
         sem_post(&cmdlock);
 
