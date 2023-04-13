@@ -18,6 +18,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+// Dummy header to silence false positive errors in VS code
+// All content is disabled with #ifndef and -D in Makefile
 #include "dummy.h"
 
 int getaddr(const char *node, const char *service,
@@ -35,8 +37,10 @@ int getaddr(const char *node, const char *service,
         hints.ai_flags = AI_PASSIVE;
     hints.ai_flags |= AI_CANONNAME;
 
+    // Fill address with the found server address
     int status = getaddrinfo(node, service, &hints, address);
 
+    // Log to stderr as stdout is used by the console. Can be redirected with 2>
     fprintf(stderr, "Connected with status %d\n", status);
 
     return status == 0;
@@ -44,6 +48,8 @@ int getaddr(const char *node, const char *service,
 
 int mksocket(void)
 {
+    // Create an IPv4 socket for use with UDP
+    // Determine the protocol automatically
     int fileDescriptor = socket(AF_INET, SOCK_DGRAM, 0);
 
     if (fileDescriptor == -1) {

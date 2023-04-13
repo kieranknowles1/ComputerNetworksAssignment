@@ -21,6 +21,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include <assert.h>
 
 #include "libnet.h"
 #include "console.h"
@@ -28,6 +29,8 @@
 #include <ctype.h>
 #include <curses.h>
 
+// Dummy header to silence false positive errors in VS code
+// All content is disabled with #ifndef and -D in Makefile
 #include "dummy.h"
 
 /* semaphores and global variables for communication */
@@ -51,6 +54,15 @@ struct condition {
     int contact;
 } landercond;
 sem_t condlock;
+
+const char* condstate_to_string(enum condstate state) {
+    switch (state) {
+        case Flying: return "Flying";
+        case Down: return "Down";
+        case Crashed: return "Crashed";
+        default: assert(false);
+    }
+}
 
 
 /*** There are five threads defined for the controller ***/
@@ -316,6 +328,8 @@ void *dashboard(void *data)
 	d = mksocket();
 
     while (true) {
+        // Format buffer for dashboard
+        // Keep landercond locked for a minimal amount of time
         sem_wait(&condlock);
         sprintf(buffer,
             "fuel:%f\n"
@@ -325,9 +339,7 @@ void *dashboard(void *data)
         );
         sem_post(&condlock);
 
-
-
-        // TODO: Task XXX, send the buffer to the dashboard by using sendto method
+        // Send formatted buffer using the previously acquired address
         sendto(d, buffer, strlen(buffer), 0, daddr->ai_addr, daddr->ai_addrlen);
 
 		usleep(500000);
@@ -339,11 +351,11 @@ void *dashboard(void *data)
 /* Data Logging.
 	Periodically logs data to a file.
 */
-// TODO: Task XXX, finish the datalogging part to Periodically log data to a file.
-// please call datalogging in the appropriate place.
 
-// 200ms = 5hz
-const int DATA_LOG_SLEEP_MICROSECONDS = 200 * 1000;
+const int MICROSECONDS_PER_SECOND = 1000 * 1000;
+
+// 5hz
+const int DATA_LOG_SLEEP_MICROSECONDS = MICROSECONDS_PER_SECOND / 5;
 const char* DATA_LOG_FILE = "lander.log";
 
 void *datalogging(void *data)
@@ -354,6 +366,7 @@ void *datalogging(void *data)
 	while(true) {
         fprintf(file, "Log entry %d:\n", index++);
 
+        // User input
         sem_wait(&cmdlock);
         fprintf(file,
             " Commands:\n"
@@ -365,15 +378,20 @@ void *datalogging(void *data)
         sem_post(&cmdlock);
 
         sem_wait(&condlock);
+
+        // Fuel, altitude, and contact state
         fprintf(file,
             " Condition:\n"
             "  Fuel: %.1f%%\n"
-            "  Altitude: %.1f\n",
+            "  Altitude: %.1f\n"
+            "  State: %s\n",
             landercond.fuel,
-            landercond.altitude
+            landercond.altitude,
+            condstate_to_string(landercond.contact)
         );
         sem_post(&condlock);
 
+        // Position and velocity
         sem_wait(&statelock);
         fprintf(file,
             " Lander state:\n"
@@ -435,7 +453,7 @@ int main(int argc, char *argv[])
     if ((e = pthread_create(&lndr, NULL, lander, argv[1])))
         fprintf(stderr, "not created lander thread: %s\n", strerror(e));
 
-    //TODO: Task XXX create one thread for dashboard with the function pthread_create
+    // Start dashboard and data logging threads
     if ((e = pthread_create(&dash, NULL, dashboard, argv[2])))
         fprintf(stderr, "Failed to create dashboard thread: %s\n", strerror(e));
 
