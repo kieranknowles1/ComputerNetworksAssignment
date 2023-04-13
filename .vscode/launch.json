@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "preLaunchTask": "C/C++: gcc build active file",
-            "program": "${workspaceFolder}/debug_controller",
+            "program": "${workspaceFolder}/src/debug_controller",
             "args": [
                 "65200",
                 "65250"
