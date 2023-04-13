@@ -5,7 +5,6 @@
 
 % https://tex.stackexchange.com/questions/116534/lstlisting-line-wrapping
 \lstset{
-    language=C,
     frame=single,
     breaklines=true,
     postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
@@ -110,7 +109,22 @@ still using the value.
         // TODO: This
 
         \subsubsection{What data is logged and why?}
-        // TODO: This
+        All data that is shown on the display is logged. This consists of:
+        \begin{itemize}
+            \item Log index.
+            \item Rotation and thrust commands.
+            \item Last input.
+            \item Fuel.
+            \item Altitude.
+            \item Contact state.
+            \item Position.
+            \item Velocity.
+            \item Angle.
+            \item Angular velocity.
+        \end{itemize}
+
+        The data is logged in the following format:
+        \lstinputlisting{sample_log.txt}
 
         \subsubsection{What are the advantages and disadvantages of logging five times per second?}
         // TODO: This
@@ -118,19 +132,21 @@ still using the value.
         \subsubsection{How often would data be logged if not a fixed interval?}
         // TODO: This
 
-        \subsubsection{{What rate does the size of the file grow and why?}}
-        // TODO: This
+        \subsubsection{{What rate does the size of the file grow?}}
+        The log file grows at a rate of approximately 1250 bytes per second.
+        This was calculated based on a log consisting of 100 entries and having
+        a size of 25kb. \mbox{(25000 / 100) * 5 = 1250}
 }
 
 \section*{References}
-List of references.
+// TODO: This
 
 \section*{Appendix}
 
 \subsection*{controller.c}
-\lstinputlisting{src/controller.c}
+\lstinputlisting[language=C]{src/controller.c}
 
 \subsection*{libnet.c}
-\lstinputlisting{src/libnet.c}
+\lstinputlisting[language=C]{src/libnet.c}
 
 \end{document}

@@ -1,0 +1,14 @@
+Log entry 66:
+ Commands:
+  Rotation: 1.0
+  Thrust: 100.0
+  Last key: Right
+ Condition:
+  Fuel: 100.0%
+  Altitude: 539.0
+  State: Flying
+ Lander state:
+  Position: 101.0 x, 51.0  y
+  Velocity: 10.0  x, 10.2  y
+  Angle: 6.000 O
+  Angular velocity: 0.000 O'
