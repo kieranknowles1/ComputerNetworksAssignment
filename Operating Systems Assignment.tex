@@ -3,6 +3,11 @@
 \usepackage{listings}
 \usepackage{xcolor}
 
+\usepackage[style=authoryear]{biblatex}
+\addbibresource{Operating Systems Assignment.bib}
+
+\usepackage{hyperref}
+
 % https://tex.stackexchange.com/questions/116534/lstlisting-line-wrapping
 \lstset{
     frame=single,
@@ -19,12 +24,34 @@
 \maketitle
 
 \section{OS Theory}
-    \subsection{What is a multiprocessing system?}
-    // TODO: This
+
+\subsection{What is a multiprocessing system?}
+A multiprocessing system uses two or more physical processor cores that
+can each execute distinct code simultaneously. (\cite{silberschatz_operating_2018})
+
     \subsubsection{Examples}
-    // TODO: This
+    Many modern web browsers, such as Google Chrome. run each tab
+    in its own process. The advantages of this approach include providing
+    "better performance, security, and reliability for your browser tabs" (\cite{parmar_microsoft_2020})
+    While multiprocessing is not the primary goal of this,
+    it allows for multiple tabs to execute code simultaneously.
+
     \subsubsection{Benefits}
-    // TODO: This
+
+    \begin{enumerate}
+        \item A multiprocessing system is more scalable as it is easier
+              and more power efficient to add additional CPU cores than
+              it is to increase the performance of individual cores.
+        \item An application utilizing multithreading is likely to perform
+              better than a single-threaded application as modern CPUs are
+              designed with many cores. A multithreaded application can use
+              multiple of these cores at a time for different tasks to avoid
+              being bottlenecked by a single task.
+        \item A multiprocessing system can be more responsive. For example,
+              if a thread is dedicated to updating the user interface,
+              then the UI will remain responsive even if other threads are
+              performing a long task such as accessing a file.
+    \end{enumerate}
 
 \subsection{The difference between a process and a thread?}
 A process is an instance of a program currently running on the system.
@@ -51,7 +78,7 @@ more expensive than with threads.
     Both threads need to access the same resource, the text being written, and therefore
     need to be part of the same process to share the same memory space.
 
-    \subsubsection{Scenario 2:}
+    \subsubsection{Scenario 2}
     You're writing a report in Microsoft Office while listening to online music from
     iTunes.
 
@@ -100,13 +127,48 @@ still using the value.
     \renewcommand{\thesubsection}{\thesection.\alph{subsection}}
 
     \subsection{Threads and Semaphores in Code}
-    // TODO: This
+        The controller uses 5 threads for the following purposes:
+        \begin{enumerate}
+            \item Display update.
+            \item Keyboard input.
+            \item Lander communication.
+            \item Dashboard communication.
+            \item Data logging.
+        \end{enumerate}
 
-    \subsection{Advantages and disadvantages of UDP nad TCP}
+        \subsubsection{Semaphore and Thread Alternatives}
+
+        As an alternative to using semaphores and threads, the application could instead
+        use a single thread that updates every component in sequence. This would eliminate
+        the need for semaphores as there would be no possibility of race conditions.
+
+        Additionally, the dashboard thread could be its own process as it only needs to forward data
+        from the lander server to the dashboard client, which could be requested by the dashboard controller itself.
+
+        Data logging can not be its own process as it requires data from the user input thread which is
+        not sent by any request from the lander server.
+
+        \subsubsection{Advantages and Disadvantages of Threads in the Program}
+        Using threads simplifies running different components at different frequencies as each thread can
+        sleep for the required amount of time without affecting any of the other threads.
+
+        Additionally, if one thread fails to run, such as the dashboard thread being unable to send data,
+        this will not affect any other threads which improves overall stability.
+
+        However, the use of threads makes the program as a whole more complex as any shared variables
+        must be protected by semaphores to prevent race conditions.
+
+        While threads have less overhead than processes, they are not free. As a result, the program may
+        use more system resources multithreaded than it would if it was single-threaded.
+
+        \subsubsection{User Input Management}
+
+        // TODO: This
+
+    \subsection{Advantages and disadvantages of UDP and TCP}
     // TODO: This
 
     \subsection{Data Logging}
-        // TODO: This
 
         \subsubsection{What data is logged and why?}
         All data that is shown on the display is logged. This consists of:
@@ -139,7 +201,8 @@ still using the value.
 }
 
 \section*{References}
-// TODO: This
+
+\printbibliography
 
 \section*{Appendix}
 
