@@ -105,7 +105,7 @@ still using the value.
     \subsubsection{What is a semaphore and how does it differ?}
     A semaphore is similar to a mutex, except that it allows one or more threads to hold
     a lock at a time instead of just one. A semaphore is initialised with a value
-    that indicates the number of locks that can be held at a time.
+    that indicates the number of locks that can be held at a time. (\cite{manual_sem_init}) (\cite{manual_sem_wait})
 
     Similar to a mutex, a thread must first lock the semaphore before accessing the shared resource.
     If there are no locks available, the thread will wait until one becomes available.
@@ -117,6 +117,22 @@ still using the value.
     such as with I/O devices, but can still be safely accessed by multiple threads at the same time.
 
 \subsection{What happens during a context switch?}
+
+During a context switch, the state of the current thread
+is saved to memory as a Process Control Block (PCB). The state includes the values of registers, the program counter
+and the stack pointer.
+
+The state of the next thread to run (which can be part of a different process) when it was last executed,
+including its registers and stack pointer,
+is then loaded into the CPU. The program counter is then set to the address
+specified in the PCB and execution continues in the new thread.
+
+A context switch is triggered when an interrupt, such as the thread
+running for too long, occurs or a system call is made, such as printing
+to the console.
+
+A context switch can be between two threads in the same process or between
+two separate processes. The process is the same for both scenarios.
 
 \includesvg{ContextSwitch.drawio.svg}
 
