@@ -10,6 +10,9 @@
 
 \usepackage{hyperref}
 
+% https://tex.stackexchange.com/questions/65291/code-snippet-in-text
+\newcommand{\code}[1]{\texttt{#1}}
+
 % https://tex.stackexchange.com/questions/116534/lstlisting-line-wrapping
 \lstset{
     frame=single,
@@ -105,7 +108,7 @@ still using the value.
     \subsubsection{What is a semaphore and how does it differ?}
     A semaphore is similar to a mutex, except that it allows one or more threads to hold
     a lock at a time instead of just one. A semaphore is initialised with a value
-    that indicates the number of locks that can be held at a time. (\cite{manual_sem_init}) (\cite{manual_sem_wait})
+    that indicates the number of locks that can be held at a time. (\cite{linux_manual_sem_init3_nodate}) (\cite{linux_manual_sem_wait3_nodate})
 
     Similar to a mutex, a thread must first lock the semaphore before accessing the shared resource.
     If there are no locks available, the thread will wait until one becomes available.
@@ -181,8 +184,16 @@ two separate processes. The process is the same for both scenarios.
         use more system resources multithreaded than it would if it was single-threaded.
 
         \subsubsection{User Input Management}
+        The program uses a separate thread to handle user input. This thread continuously polls
+        the keyboard using the \code{key\textunderscore pressed} function. If a key is pressed,
+        \code{landercommand} is updated based on the key pressed.
 
-        // TODO: This
+        \code{key\textunderscore pressed} calls \code{wgetch} which returns the \code{ERR} macro if
+        the input queue is empty. A while loop is used to continuously call \code{wgetch} until a key
+        is pressed.
+
+        \code{wgetch} then pops the key from the input queue and returns it (\cite{linux_manual_wgetch3_nodate}),
+        this ensures that each keypress is only processed once.
 
     \subsection{Advantages and disadvantages of UDP and TCP}
     // TODO: This
