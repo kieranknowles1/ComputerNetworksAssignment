@@ -197,11 +197,27 @@ two separate processes. The process is the same for both scenarios.
 
     \subsection{TCP Compared to UDP}
     \subsubsection{TCP Implementation}
-    A TCP implementation could look as follows, assuming that the server
-    listened to TCP packets:
-    Note that some code has been replaced with comments for brevity.
+    The following changes are required in order to communicate with the lander
+    via TCP instead of UDP:
 
-    \lstinputlisting[language=c]{tcp_implementation.c}
+    \begin{enumerate}
+        \item getaddr and mksocket need an extra parameter for the socket type.
+        \item SOCK\textunderscore DGRAM must be changed to the socket type
+              parameter in getaddr and mksocket.
+        \item SOCK\textunderscore STREAM must be passed to getaddr and mksocket in the lander thread.
+        \item The socket must be connected the lander using the \code{connect}
+              function prior to communicating.
+        \item \code{sendto} and \code{recvfrom} must be replaced with \code{send}
+              and \code{recv} respectively. The fifth and sixth parameters containing
+              the address of the lander and its length must be removed as they are
+              instead stored with the socket.
+        \item The new socket type parameter must be passed as SOCK\textunderscore DGRAM in
+              the dashboard thread as this still uses UDP.
+    \end{enumerate}
+
+    See tcp\textunderscore implementation.c in the appendix for the full
+    code of the changed functions. Lines that have been changed are marked
+    with comments starting with "TCP".
 
     \subsubsection{Advantages and disadvantages of UDP and TCP}
     Using UDP for communication is simpler than TCP as it does not require establishing a connection,
@@ -260,5 +276,8 @@ two separate processes. The process is the same for both scenarios.
 
 \subsection*{libnet.c}
 \lstinputlisting[language=C]{src/libnet.c}
+
+\subsection*{tcp\textunderscore implementation.c}
+\lstinputlisting[language=c]{tcp_implementation.c}
 
 \end{document}
