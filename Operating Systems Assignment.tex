@@ -195,8 +195,27 @@ two separate processes. The process is the same for both scenarios.
         \code{wgetch} then pops the key from the input queue and returns it (\cite{linux_manual_wgetch3_nodate}),
         this ensures that each keypress is only processed once.
 
-    \subsection{Advantages and disadvantages of UDP and TCP}
-    // TODO: This
+    \subsection{TCP Compared to UDP}
+    \subsubsection{TCP Implementation}
+    A TCP implementation could look as follows, assuming that the server
+    listened to TCP packets:
+    Note that some code has been replaced with comments for brevity.
+
+    \lstinputlisting[language=c]{tcp_implementation.c}
+
+    \subsubsection{Advantages and disadvantages of UDP and TCP}
+    Using UDP for communication is simpler than TCP as it does not require establishing a connection,
+    however, UDP does not guarantee that packets will be received in the same
+    order they were sent or at all. This may result in the dashboard receiving
+    incorrect or no data and the lander receiving incorrect commands.
+
+    As the code is structured to make a single request to the lander then
+    wait for a response indefinitely, a deadlock will occur if either the
+    request or response is dropped.
+
+    Using TCP would prevent all of these issues as it guarantees that packets
+    will be received and that they will be processed in the same order they
+    were sent.
 
     \subsection{Data Logging}
 
