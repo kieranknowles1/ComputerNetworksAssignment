@@ -254,10 +254,19 @@ two separate processes. The process is the same for both scenarios.
         \lstinputlisting{sample_log.txt}
 
         \subsubsection{What are the advantages and disadvantages of logging five times per second?}
-        // TODO: This
+        Logging five times per second results in the log being more accurate than if it was logged less frequently
+        as it contains more data points and therefore is more likely to contain brief events that could otherwise
+        be missed.
 
-        \subsubsection{How often would data be logged if not a fixed interval?}
-        // TODO: This
+        However, logging more frequently results in the log file growing at a faster rate as discussed below. This
+        may result in the file using a significant amount of disk space if the program is running for a long time.
+        Additionally, the log will be more difficult to read as it contains more data points that a user would
+        have to look through. This could be mitigated by logging in a machine-readable format such as JSON or XML.
+
+        \subsubsection{How often would data be logged if not five times per second?}
+        If the data was not required to be logged five times per second, it could instead be logged every 500ms
+        as this is the frequency at which the display is updated. This would reduce the rate at which the log
+        file grows to 500 bytes per second.
 
         \subsubsection{{What rate does the size of the file grow?}}
         The log file grows at a rate of approximately 1250 bytes per second.
