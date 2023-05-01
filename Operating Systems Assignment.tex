@@ -140,9 +140,18 @@ two separate processes. The process is the same for both scenarios.
 \includesvg{ContextSwitch.drawio.svg}
 
 \subsection{What is TLS}
-// TODO: This
+"The primary goal of the TLS protocol is to provide privacy and data integrity between
+two communicating applications" (\cite{rescorla_transport_2008}). The protocol encrypts
+data sent between the client and server to prevent it from being intercepted or modified.
+As of 2019, nearly 75\% of HTTP traffic was encrypted by TLS-based HTTPS (\cite{greg_ferro_percentage_2019})
+
     \subsubsection{How does TLS protect private information?}
-    // TODO: This
+    TLS protects a user making a bank transaction by encrypting data, such as card
+    details, sent between the user and the bank's server. This prevents an attacker from
+    intercepting the details and using them to make a fraudulent transfer, such as transferring
+    money to their own account.
+
+    \includesvg{TLS.drawio.svg}
 
 \section{The Lunar Lander Controller}{
     % https://tex.stackexchange.com/questions/74529/sections-indexed-with-numbers-subsections-with-letters
@@ -265,7 +274,7 @@ two separate processes. The process is the same for both scenarios.
 
         \subsubsection{How often would data be logged if not five times per second?}
         If the data was not required to be logged five times per second, it could instead be logged every 500ms
-        as this is the frequency at which the display is updated. This would reduce the rate at which the log
+        as this is the frequency at which the display and dashboard are updated. This would reduce the rate at which the log
         file grows to 500 bytes per second.
 
         \subsubsection{{What rate does the size of the file grow?}}
